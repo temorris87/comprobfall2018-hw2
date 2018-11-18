@@ -1,0 +1,26 @@
+\question{[5]}
+
+Describe your implementation for the local planner in SE(3), as well as how you
+collision check the corresponding path, and why these are the right choices
+for the problem.
+
+The implementation for the local planner in SE(3) uses interpolation seperately
+for euclidean space and orientation space. In euclidean space the interpolation
+is done by dividing the line segment evenly into $n$ distinct points. For each
+of those $n$ points, a point is found that corresponds at that specific point
+in the orientation space. The orientation space is divided into $n$ points as
+well using the spherical linear interpolation algorithm ($slerp$) on page 5 in the
+Effective Sampling and Distance Metrics for Rigid Body Path Planning written
+by James J. Kuffner. Combining each of the euclidean points with its
+corresponding orientation, a conversion is made into a matrix that the PQP
+algorithm accepts and testing for collision is performed.
+
+These are the right choices because both the euclidean space and orientation
+space between two points is evenly divided up and matched together. The $slerp$
+algorithm is best for orientation because it follows the great arc of the
+fourth dimensional hypersphere, giving the most accurate representation.
+This will allow for the smoothest transition between translation and orientation
+that is possible between these two points. The only difficulty arises in making
+sure that $n$ is large enough that all collisions are detected on the path
+between two points. If $n$ is too small, it is possible that the piano will jump
+too far and miss noticing that a collision would have occured.

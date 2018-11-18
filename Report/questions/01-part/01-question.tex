@@ -1,0 +1,62 @@
+\question{[5]}
+
+Describe your choice for representing configurations in SE(3) and how you are
+sampling collision-free configurations. Argue that your sampling process
+is indeed generating uniform at random configurations in the free
+part of the configuration space.
+
+The choice made for representing configurations in SE(3) is to use
+$\mathbb{R}^3$ for euclidean distance and quaternions for orientation.
+In order to determine if a given configuration is collision free we transform
+it into a matrix that the PQP library accepts and use PQP to check for the
+collision. Uniform sampline in $\mathbb{R}^3$ is simply done by taking random
+values within the bounds of our configuration space for $(x, y, z)$.
+For sampling SO(3) uniformly, the following algorithm is used:
+
+\begin{algorithm}[H]
+	\KwData {None}
+	\KwResult {Random uniformly distributed uniform quaternion.}
+	$s \gets rand()$\;
+	$\sigma_1 \gets \sqrt{1-s}$\;
+	$\sigma_2 \gets \sqrt{s}$\;
+	$\theta_1 \gets 2\pi \cdot rand()$\;
+	$\theta_2 \gets 2\pi \cdot rand()$\;
+	$w \gets cos(\theta_2) \cdot \sigma_2$\;
+	$x \gets sin(\theta_1) \cdot \sigma_1$\;
+	$y \gets cos(\theta_1) \cdot \sigma_1$\;
+	$z \gets sin(\theta_2) \cdot \sigma_2$\;
+	$(w,x,y,z)$
+\end{algorithm}
+
+First we start by showing that this algorithm produces a unit length vector.
+The quaternion $(w, x, y, z)$ is just a vector, and it's magnitude is:
+
+\begin{align*}
+  = &\sqrt{w^2 + x^2 + y^2 + z^2} \\
+  = &\sqrt{cos^2(\theta_2)\cdot\sigma_2^2 + sin^2(\theta_1)\cdot\sigma_1^2 + cos^2(\theta_1)\cdot\sigma_1^2 + sin^2(\theta_2)\cdot\sigma_2^2} \\
+  = &\sqrt{\sigma_2^2(cos^2(\theta_2) + sin^2(\theta_2)) + \sigma_1^2(cos^2(\theta_1) + sin^2(\theta_1))} \\
+  = &\sqrt{\sigma_2^2 + \sigma_1^2} \\
+  = &\sqrt{(\sqrt{1-s})^2 + (\sqrt{s})^2} \\
+  = &\sqrt{1 - s + s} \\
+  = &\sqrt{1} \\
+  = &1
+\end{align*}
+
+So now that we know that the quaternions being produced are unit quaternions,
+we now have to show that there is no possibility of two quaternions pointing
+to the same position on a unit sphere. To do this we first take note that
+$\theta_1$ and $\theta_2$ are coordinates on a torus. Given two coordinates in
+this manner, we can find a \emph{unique} point along the surface of a torus.
+Now we have to look at what effect $s$ has on our computation. What $s$ does
+is essentially cut out a particular torus from four dimensional space. We can
+visualize this if we look at $\sigma_1$ as being the radius from the hole
+of the torus to the center of an edge and view $\sigma_2$ as the radius of a
+cross section of the edge.
+
+From the above argument we conclude that this algorithm first picks a
+particular torus from four dimensional space, then uniquely identifies
+points along the surface of that torus. Since there is no overlap we conclude
+that this process generates uniform at random configurations for the
+configuration SO(3). Since random values $(x,y,z)$ will be uniform in
+$\mathbb{R}^3$, we further conclude that this process generates uniform at
+random configurations for SE(3).

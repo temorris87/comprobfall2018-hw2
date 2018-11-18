@@ -1,0 +1,48 @@
+\pagebreak
+\question{[5]}
+
+Describe your choice of distance function in SE(3) and why do you think that it
+is appropriate for finding good neighborhoods.
+
+The choice for total distance uses euclidean and orientation weights $w_e$ and
+$w_o$ as well as euclidean and orientation distances $d_e$ and $d_o$ as
+follows:
+$$d = w_ed_e + w_od_o$$
+subject to:
+\begin{align*}
+w_e + w_o &= 1 \\
+d_e, d_o &\in [0,1]
+\end{align*}
+With the above restraints, we have $d \in [0,1]$.
+
+For euclidean distance we scale the euclidean norm to the range $[0,1]$ as
+follows:
+$$d_e = \dfrac{\sqrt{x^2 + y^2 + z^2}}{d_{max}}$$
+where we take $d_{max}$ to be the maximum possible euclidean distance in the
+configuration space. The limited range on $d_e$ is used specifically for
+allowing user control on the weights for euclidean versus orientation distances.
+
+The choice of distance $d_o$ for quaternions $Q_1$ and $Q_2$ is the dot product
+manipulated as follows:
+$$d_o = 1 - |Q_1 \cdot Q_2|$$
+Use of the dot product here is simply because it produces an approximation
+to the length of the great arc circle over a foud dimensional sphere. This
+can be seen by taking $cos^{-1}(Q_1 \cdot Q_2)$. There is no need for the actual
+computation of the arccos since it is proportional the angle between two
+vectors is proportional to the length of the arc at their tips.
+
+Since we are dealing with unit quaternion, we know that $Q_1 \cdot Q_2$ will
+fall in the range $[-1, 1]$. All of the rotations in the range $[-1,0)$ are mirror
+images of the rotations in the range $(0,1]$, so the absolute value of the
+dot product is taken to eliminate the bottom range.
+
+This particular method is appropriate for finding good neighborhoods because it
+focuses on approximating the distance following the actual path through our
+configuration space in both the translation and orientation phases.
+In terms of euclidean distance, the sortest path is the straight line distance
+between two points, so this is the metric we wish to use.
+In terms of orientation distance, it approximates the orientation path along
+the great circle arc in orientation space, which is the shortest path between
+two points on a hypersphere. Since there is no shorter distance, this is
+precisely the path we wish to travel so this is precisely the distance we wish
+to measure.
