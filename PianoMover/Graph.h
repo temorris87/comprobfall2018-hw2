@@ -48,9 +48,8 @@ public:
     std::priority_queue<node*, std::vector<node*>, min_comparator> fringe;
     //virtual void build_graph();
 
-private:
     const double distance = 0.2;
-    const int steps_for_interplolation = 1000;
+    const int steps_for_interplolation = 100;
     bool first_node = true;
     int totalNodesToCreate;
     Configuration * get_random_config();     //gets a random configuration
@@ -75,7 +74,6 @@ private:
     std::forward_list<int> * astar(int start_node, int end_node, bool free_direction);
     SpecialEuclideanThreeSpace * configuration_solver;
 
-public:
     PQP_Model * piano;
     PQP_Model * room;
     Graph(int numNodes_to_create, int nearest_neighbors, double min_x, double max_x, double min_y,

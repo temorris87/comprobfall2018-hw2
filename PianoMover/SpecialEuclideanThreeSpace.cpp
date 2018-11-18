@@ -68,6 +68,15 @@ Configuration * SpecialEuclideanThreeSpace::get_random_configuration() {
     return configuration;
 }
 
+Configuration * SpecialEuclideanThreeSpace::get_random_end_configuration() {
+    Configuration * configuration = new Configuration();
+
+    configuration->position = get_random_end_translation();
+    configuration->rotation = get_random_end_rotation();
+
+    return configuration;
+}
+
 double SpecialEuclideanThreeSpace::get_random_in_range(double n, double m) {
     double r = ((float) rand()) / RAND_MAX;
     if (m > n)
@@ -102,6 +111,36 @@ Quaternion * SpecialEuclideanThreeSpace::get_random_rotation() {
     rot->y = cos(theta_1) * sigma_1;
     rot->z = sin(theta_2) * sigma_2;
 
+    return rot;
+}
+
+Translation * SpecialEuclideanThreeSpace::get_random_end_translation() {
+    Translation * pos = new Translation();
+
+    pos->x = get_random_in_range(min_x, max_x);
+    pos->y = get_random_in_range(min_y, max_y);
+    pos->z = get_random_in_range(0.4, 0.4);
+}
+
+Quaternion * SpecialEuclideanThreeSpace::get_random_end_rotation() {
+    Quaternion * rot = new Quaternion();
+
+    double roll = 0;
+    double pitch = 0;
+    double yaw = get_random_in_range(0, 2 * M_PI);
+
+    double cy = cos(yaw * 0.5);
+    double sy = sin(yaw * 0.5);
+    double cr = cos(roll * 0.5);
+    double sr = sin(roll * 0.5);
+    double cp = cos(pitch * 0.5);
+    double sp = sin(pitch * 0.5);
+
+    rot->w = cy * cr * cp + sy * sr * sp;
+    rot->x = cy * sr * cp - sy * cr * sp;
+    rot->y = cy * cr * sp + sy * sr * cp;
+    rot->z = sy * cr * cp - cy * sr * sp;
+    
     return rot;
 }
 

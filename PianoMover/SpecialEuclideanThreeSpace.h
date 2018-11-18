@@ -126,6 +126,11 @@ private:
     Quaternion * normalize_quaternion(Quaternion * q);
 
 public:
+
+    Translation * get_random_end_translation();
+    Configuration * get_random_end_configuration();
+    Quaternion * get_random_end_rotation();
+
     /**
      * Construct the boundaries in euclidean space that any given configuration cannot violate.
      * @param min_x

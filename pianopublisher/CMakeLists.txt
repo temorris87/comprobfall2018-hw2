@@ -9,6 +9,9 @@ project(pianopublisher)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS roscpp)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -191,6 +194,16 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable (piano_pub pianopublisher.cpp)
+add_executable (piano_pub pianopublisher.cpp
+                          ${CMAKE_SOURCE_DIR}/comprobfall2018-hw2/PianoMover/Graph.h
+                          ${CMAKE_SOURCE_DIR}/comprobfall2018-hw2/PianoMover/Graph.cpp
+                          ${CMAKE_SOURCE_DIR}/comprobfall2018-hw2/PianoMover/SpecialEuclideanThreeSpace.h
+                          ${CMAKE_SOURCE_DIR}/comprobfall2018-hw2/PianoMover/SpecialEuclideanThreeSpace.cpp
+                          ${CMAKE_SOURCE_DIR}/comprobfall2018-hw2/PianoMover/MeshReader.h
+                          ${CMAKE_SOURCE_DIR}/comprobfall2018-hw2/PianoMover/MeshReader.cpp
+                          ${CMAKE_SOURCE_DIR}/comprobfall2018-hw2/PianoMover/lib/Build.o
+                          ${CMAKE_SOURCE_DIR}/comprobfall2018-hw2/PianoMover/lib/BV.o
+                          ${CMAKE_SOURCE_DIR}/comprobfall2018-hw2/PianoMover/lib/PQP.o
+                          ${CMAKE_SOURCE_DIR}/comprobfall2018-hw2/PianoMover/lib/TriDist.o)
 add_dependencies(piano_pub ${catkin_EXPORTED_TARGETS})
 target_link_libraries(piano_pub ${catkin_LIBRARIES})

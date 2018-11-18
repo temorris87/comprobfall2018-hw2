@@ -176,7 +176,7 @@ void Graph::print_road_map() {
 }
 
 Configuration * Graph::get_random_config() {
-    return configuration_solver->get_random_configuration();
+    return configuration_solver->get_random_end_configuration();
 }
 
 node * Graph::getNodes(int id){
